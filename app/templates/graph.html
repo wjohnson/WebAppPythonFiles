@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    #mynetwork {
+      width: 800px;
+      height: 600px;
+      border: 1px solid lightgray;
+    }
+  </style>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+       <div>
+        <form action="{{ url_for('search_page') }}" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.search(size=32, class="form-control form-control-lg") }}{{ form.submit(class="btn btn-primary mb-2") }}
+            
+        </form>
+       </div>
+    </div>
+    <div class="col-md-9">
+        <div>
+         <h2>Results for..."{{query}}"</h2>
+         {% if results|length > 0 %}
+
+         <div id="mynetwork"></div>
+
+            <script type="text/javascript">
+            // create an array with nodes
+            var nodes = new vis.DataSet([
+                {% for node in graph_dict %}
+                {% if loop.last %}
+                {id: {{node["id"]}}, label: '{{node["label"]}}'}
+                {% else %}
+                {id: {{node["id"]}}, label: '{{node["label"]}}'},
+                {% endif %}
+                {% endfor %}
+            ]);
+
+            // create an array with edges
+            var edges = new vis.DataSet([
+                {% for edge in edge_list %}
+                {% if loop.last %}
+                {from: {{edge[0]}}, to: {{edge[1]}}, arrows:'to'}
+                {% else %}
+                {from: {{edge[0]}}, to: {{edge[1]}}, arrows:'to'},
+                {% endif %}
+                {% endfor %}
+            ]);
+
+            // create a network
+            var container = document.getElementById('mynetwork');
+            var data = {
+                nodes: nodes,
+                edges: edges
+            };
+            var options = {};
+            var network = new vis.Network(container, data, options);
+            </script>
+            
+        {% else %}
+        <p>Please try broadening your search or using the suggester feature.</p>
+        {% endif %}
+        </div>
+     </div>
+</div>
+{% endblock %}

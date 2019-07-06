@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+       <div>
+        <form action="{{ url_for('search_page') }}" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.search(size=32, class="form-control form-control-lg") }}{{ form.submit(class="btn btn-primary mb-2") }}
+            
+        </form>
+       </div>
+    </div>
+    <div class="col-md-9">
+        <div>
+         {% if results|length > 0 %}
+         <div class="float-sm-right">
+             <a href="{{ url_for('graph',query=query) }}"><img src="https://<STORAGE-ACCT-NAME>.blob.core.windows.net/publicapp/graph-node.PNG" width="80" height="86"></a>
+        </div><br>
+        <h2>{{results|length}} Results for..."{{query}}"</h2>
+            {% for doc in results %}
+            <div>
+                <h4>{{ doc.parentDoc}}</h4>
+                <p>
+                {% if doc.pageNum %}
+                <span>Page #: {{ doc.pageNum }}</span>
+                {% endif %}
+                {% if doc.img_url %}
+                <span><a href="{{ doc.img_url }}"><img src="{{ doc.img_url }}" class="img-thumbnail"></a> </span>
+                {% endif %}
+                </p>
+                <div>
+                {% if "@search.highlights" in doc %}
+                    {% for snippet in doc["@search.highlights"]["content"] %}
+                        <p>{{ snippet | safe}}</p>
+                    {% endfor %}
+                {% else %}
+                <p>
+                    {{ doc.content | truncate}}
+                </p>
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <h2>No Search Results!</h2>
+        <p>Please try broadening your search or using the suggester feature.</p>
+         {% endif %}
+        </div>
+     </div>
+</div>
+{% endblock %}

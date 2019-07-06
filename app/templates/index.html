@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <img src="{{ url_for('static', filename='img/logo.png') }}", height="419", width="800">
+       <div>
+        <form action="{{ url_for('search_page') }}" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.search(size=32, class="form-control form-control-lg") }}{{ form.submit(class="btn btn-primary mb-2") }}
+            
+        </form>
+       </div>
+    </div>
+</div>
+{% endblock %}
