@@ -1,0 +1,8 @@
+.vscode
+__pycache__
+app.db
+migrations/
+env/
+.pytest_cache
+*.env
+nsfabs

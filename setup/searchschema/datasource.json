@@ -1,0 +1,15 @@
+{
+    "name": "abstracts-blob",
+    "description": null,
+    "type": "azureblob",
+    "subtype": null,
+    "credentials": {
+        "connectionString": null
+    },
+    "container": {
+        "name": "abstracts",
+        "query": null
+    },
+    "dataChangeDetectionPolicy": null,
+    "dataDeletionDetectionPolicy": null
+}

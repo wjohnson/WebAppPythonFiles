@@ -1,0 +1,55 @@
+{
+    "name": "REQUIRED",
+    "description": "",
+    "dataSourceName": "REQUIRED",
+    "skillsetName": "REQUIRED",
+    "targetIndexName": "REQUIRED",
+    "disabled": null,
+    "schedule": null,
+    "parameters": {
+        "batchSize": null,
+        "maxFailedItems": -1,
+        "maxFailedItemsPerBatch": -1,
+        "base64EncodeKeys": false,
+        "configuration": {
+            "dataToExtract": "contentAndMetadata",
+            "parsingMode":"text"
+        }
+    },
+    "fieldMappings": [
+        {
+            "sourceFieldName": "metadata_storage_path",
+            "targetFieldName": "metadata_storage_path_key",
+            "mappingFunction": {
+                "name": "base64Encode",
+                "parameters": null
+            }
+        },
+        {
+            "sourceFieldName": "metadata_storage_path",
+            "targetFieldName": "metadata_storage_path"
+        }
+    ],
+    "outputFieldMappings": [
+        {
+            "sourceFieldName": "/document/content/people",
+            "targetFieldName": "people",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/content/locations",
+            "targetFieldName": "locations",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/content/organizations",
+            "targetFieldName": "organizations",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/content/keyphrases",
+            "targetFieldName": "keyphrases",
+            "mappingFunction": null
+        }
+    ]
+}
