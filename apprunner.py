@@ -1,4 +1,4 @@
-from app import appvar, db
+from app import appvar
 from app.models import User
 
 if __name__ == '__main__':
