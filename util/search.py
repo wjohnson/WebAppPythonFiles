@@ -4,7 +4,7 @@ import json
 from util.common import pretty_print_POST
 
 def search_header():
-    headers = {'content-type': 'application/json', 'api-key': appvar.config["SEARCH_KEY"]}
+    headers = {'content-type': 'application/json', 'api-key': appvar.config["SEARCH_QUERY_KEY"]}
     return headers
 
 def search_url(action=None):

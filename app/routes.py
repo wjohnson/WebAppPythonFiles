@@ -5,12 +5,9 @@ from .forms import SearchForm
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 
-# from util import doc_cracking
-# from util import storage
-# from util import search
-# from util import graph as jsgraph
+from util import search
+from util import graph as jsgraph
 
-import uuid
 import os
 from urllib.parse import quote_plus, quote
 import requests
@@ -29,41 +26,33 @@ def search_page():
     query = None
     results = []
 
-    # if form.validate_on_submit():
-    #     sas_token = appvar.config["BLOB_SAS"]
-    #     query = form.search.data
-    #     query_string = {'search':quote_plus(query.strip()), "highlight":"content"}
-    #     results = search.query_index(query_string)
-
-    #     # Create Image URL 
-    #     for doc in results:
-    #         if doc["docType"] == "Handwritten":
-    #             url = appvar.config["BLOB_URL"]+appvar.config["BLOB_CONTAINER"]+"/"+doc["parentDoc"]+sas_token
-    #             doc.update({"img_url":url})
-            
+    if form.validate_on_submit():
+        query = form.search.data
+        query_string = {'search':quote_plus(query.strip()), "highlight":"content"}
+        results = search.query_index(query_string)
 
     return render_template('search.html', title="Search a Topic", form=form, results = results, query = query)
 
-# @appvar.route('/graph/<query>', methods=["POST","GET"])
-# def graph(query):
-#     form = SearchForm()
-#     results = []
+@appvar.route('/graph/<query>', methods=["POST","GET"])
+def graph(query):
+    form = SearchForm()
+    results = []
 
-#     query_string = {'search':quote_plus(query.strip()), "$select":"entities"}
-#     results = search.query_index(query_string)
+    query_string = {'search':quote_plus(query.strip()), "$select":"keyphrases"}
+    results = search.query_index(query_string)
 
-#     list_of_entities_lists = [doc["entities"] for doc in results]
+    list_of_entities_lists = [doc["keyphrases"] for doc in results]
 
-#     nodes, edges = jsgraph.node_edge_creation(list_of_entities_lists, query)
+    nodes, edges = jsgraph.node_edge_creation(list_of_entities_lists, query)
 
-#     graph_dict = [{"id":i, "label":value} for i, value in nodes]
+    graph_dict = [{"id":i, "label":value} for i, value in nodes]
 
-#     return render_template('graph.html', 
-#         title='Relationship Mapping', 
-#         form = form ,
-#         query = query, 
-#         graph_dict= graph_dict,
-#         edge_list = edges,
-#         results = results
-#     )
+    return render_template('graph.html', 
+        title='Relationship Mapping', 
+        form = form ,
+        query = query, 
+        graph_dict= graph_dict,
+        edge_list = edges,
+        results = results
+    )
 
